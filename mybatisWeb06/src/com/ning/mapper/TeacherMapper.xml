@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ning.mapper.TeacherMapper">
+    <resultMap id="mymap" type="teacher">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <!--老师实体类中需要的是一个list集合-->
+        <collection property="list"  select="com.ning.mapper.StudentMapper.selByTid" column="id"/>
+    </resultMap>
+    <select id="selAll" resultMap="mymap">
+        select * from teacher
+    </select>
+
+
+    <resultMap id="mymap1" type="teacher">
+        <id column="tid" property="id"/>
+        <result column="tname" property="name"/>
+        <collection property="list" ofType="student">
+            <id column="sid" property="id"/>
+            <result column="sname" property="name"/>
+            <result column="age" property="age"/>
+            <result column="tid" property="tid"/>
+        </collection>
+    </resultMap>
+    <select id="selAll1" resultMap="mymap1">
+        select t.id tid,t.name tname,s.id sid,s.name sname,age,tid from teacher t left join student s on t.id=s.tid
+    </select>
+</mapper>
